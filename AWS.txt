@@ -1,0 +1,79 @@
+AWS Account Credentials:
+
+UserName: upendarmankena@gmail.com
+Password: Welcome@2024URM44
+
+AWS- Create virtual machine using AWS CLI
+
+Create a key pair.
+
+aws ec2 create-key-pair --key-name ubuntu --query 'KeyMaterial' --output text > ubuntu.pem
+
+To check the existed key pair details:
+
+aws ec2 describe-key-pairs --filters Name=key-name,Values=ubuntu --output text
+
+Delete key pair 
+
+aws ec2 delete-key-pair --key-name MyKeyPair
+
+
+create security group:
+
+aws ec2 create-security-group --group-name MySecurityGroup --description "My security group"
+
+ "GroupId": "sg-0aa571a84c818086a"
+
+To find the details of group:
+
+aws ec2 describe-security-groups 
+
+if you know the group id:
+
+aws ec2 describe-security-groups --group-ids sg-05253984da1c0cdf9
+
+Delete the security group:
+
+aws ec2 delete-security-group --group-name MySecurityGroup
+
+aws ec2 delete-security-group --group-id sg-05253984da1c0cdf9
+
+
+allow ssh port:
+
+aws ec2 authorize-security-group-ingress --group-name MySecurityGroup --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+C:\Users\Upendar Rao>aws ec2 authorize-security-group-ingress --group-name MySecurityGroup --protocol tcp --port 22 --cidr 0.0.0.0/0
+{
+    "Return": true,
+    "SecurityGroupRules": [
+        {
+            "SecurityGroupRuleId": "sgr-06176d526f82bb126",
+            "GroupId": "sg-0aa571a84c818086a",
+            "GroupOwnerId": "290716003248",
+            "IsEgress": false,
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrIpv4": "0.0.0.0/0"
+        }
+    ]
+}
+
+
+Create/Run instances:
+
+aws ec2 run-instances --image-id ami-0fc5d935ebf8bc3bc --instance-type t2.micro --count 1 --key-name ubuntu --security-groups MySecurityGroup
+
+
+To  get the aws instance details:
+
+aws ec2 run-instances --image-id ami-0fc5d935ebf8bc3bc --instance-type t3.micro --count 1 --key-name linux --security-groups MySecurityGroup
+
+................................
+
+if you are in one region and creae the instance in another region, use below connamd. Before you create we can get the availble AMIs in which region you want to create.
+
+
+aws ec2 run-instances --image-id ami-0fe8bec493a81c7da --instance-type t3.micro --count 1 --key-name test --security-groups MySecurityGroup --region eu-north-1
+
